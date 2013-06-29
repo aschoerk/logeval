@@ -1,0 +1,260 @@
+/*
+ * DbHandler.java
+ *
+ * Created on 26. Februar 2007, 12:16
+ *
+ * To change this template, choose Tools | Template Manager
+ * and open the template in the editor.
+ */
+
+package com.ptvag.logeval;
+
+import com.ptvag.logeval.extraction.BaseLineHandler;
+import com.ptvag.logeval.extraction.LineHandler;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.sql.Types;
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+
+/**
+ *
+ * @author xzas
+ */
+public class DbHandler extends BaseLineHandler implements LineHandler {
+    IDbConnectionFactory connectionFactory;
+    Connection conn;
+    PreparedStatement pstmt;
+    int reccount;
+    int maxtracount;
+    int maxbatchcount;
+    int maxVarcharSize;
+    IOutputter outputter = null;
+    
+    public DbHandler(LogEvalConfig config, ReplacementContext context, IDbConnectionFactory connectionFactory, IOutputter outputter) {
+        super(config, context);
+        this.connectionFactory = connectionFactory;
+        try {
+          maxtracount = Integer.parseInt(config.getTransactionSize());
+        }
+        catch (NumberFormatException e) {
+            maxtracount = 10000;
+        }
+        try {
+          maxbatchcount = Integer.parseInt(config.getBatchSize());
+        }
+        catch (NumberFormatException e) {
+            maxbatchcount = 100;
+        }
+        try {
+          maxVarcharSize = Integer.parseInt(config.getMaxVarcharSize());
+        }
+        catch (NumberFormatException e) {
+            maxVarcharSize = 255;
+        }
+          
+        initOracleTypes();
+        this.outputter = outputter;
+    }
+    
+    HashMap typeToDbType = new HashMap();
+    void initOracleTypes() {
+        typeToDbType.put("varchar","varchar(" + maxVarcharSize + ")");
+        typeToDbType.put("number","number");
+        typeToDbType.put("timestamp","timestamp");
+        typeToDbType.put("date","date");
+        typeToDbType.put("time","time");
+    }
+    
+    String createTableString() {
+        StringBuffer sb = new StringBuffer();
+        HashMap doneFields = new HashMap();
+        sb.append("create table ");
+        sb.append(config.getDestTableName());
+        sb.append("(");
+        FieldExtractionConfig[] fields = config.getFieldExtractionConfigs();
+        for (int i = 0; i < fields.length; i++) {
+            FieldExtractionConfig currentConfig = fields[i];
+            String fieldname = currentConfig.getFieldName();
+            if (doneFields.containsKey(fieldname)) {
+                FieldExtractionConfig oldConfig = (FieldExtractionConfig)doneFields.get(fieldname);
+                if (oldConfig.getFieldType() != currentConfig.getFieldType())
+                    throw new LogEvaluatorException("expected multiple declared fields to have matching types");
+            } else {
+                if (i > 0)
+                    sb.append(", ");
+                sb.append(currentConfig.getFieldName());
+                sb.append(" ");
+                sb.append(typeToDbType.get(currentConfig.getFieldType().toLowerCase()));
+                doneFields.put(fieldname,currentConfig);
+            }
+        }
+        sb.append(")");
+        return sb.toString();
+    }
+    void prepareTable() throws SQLException {
+        DatabaseMetaData metaData = conn.getMetaData();
+        ResultSet tables = metaData.getTables(null,null,config.getDestTableName().toUpperCase(),null);
+        boolean tableExists = tables.next();
+        if (tableExists && config.isForceCreateTable()) {
+            String command = "drop table " + config.getDestTableName();
+            Statement stmt = conn.createStatement();
+            stmt.execute(command);
+            stmt.close();
+            tableExists = false;
+        }
+        if (!tableExists) {
+            if (config.isAllowToCreateTable() || config.isForceCreateTable()) {
+                String command = createTableString();
+                Statement stmt = conn.createStatement();
+                stmt.execute(command);
+                stmt.close();
+            } else
+                throw new LogEvaluatorException("Table " + config.getDestTableName() + " does not exist and may not be created");
+        } else {
+            if (config.isTruncIfExistsTable()) {
+                Statement stmt = conn.createStatement();
+                stmt.execute("truncate table " + config.getDestTableName());
+                stmt.close();
+            }
+        }
+    }
+    
+    String prepareInsertStmt() {
+        StringBuffer sb = new StringBuffer();
+        HashMap doneFields = new HashMap();
+        sb.append("insert into ");
+        sb.append(config.getDestTableName());
+        sb.append("(");
+        FieldExtractionConfig[] fields = config.getFieldExtractionConfigs();
+        int fieldnum = 0;
+        for (int i = 0; i < fields.length; i++) {
+            FieldExtractionConfig currentConfig = fields[i];
+            String fieldname = currentConfig.getFieldName();
+            if (!doneFields.containsKey(fieldname)) {
+                if (i > 0)
+                    sb.append(",");
+                sb.append(fieldname);
+                fieldnum++;
+                doneFields.put(fieldname,"");
+            }
+        }
+        sb.append(") VALUES (");
+        for (int i = 0; i < fieldnum; i++) {
+            if (i > 0)
+                sb.append(", ?");
+            else
+                sb.append("?");
+        }
+        sb.append(")");
+        return sb.toString();
+    }
+    public void startWriting() {
+        conn = connectionFactory.newConnection();
+        try {
+            conn.setAutoCommit(true);
+            prepareTable();
+            conn.setAutoCommit(false);
+            pstmt = conn.prepareStatement(prepareInsertStmt());
+        } catch (SQLException e) {
+            throw new LogEvaluatorException(e);
+        }
+    }
+    
+    Date getDate(String text) {
+        int year = Integer.parseInt(text.substring(0,4));
+        int month = Integer.parseInt(text.substring(5,7))-1;
+        int day = Integer.parseInt(text.substring(8,10));
+        int hour = Integer.parseInt(text.substring(11,13));
+        int minute = Integer.parseInt(text.substring(14,16));
+        int second = Integer.parseInt(text.substring(17,19));
+        Calendar cal = Calendar.getInstance();
+        cal.set(year,month,day,hour,minute,second);
+        cal.set(Calendar.MILLISECOND,0);
+        /*
+        DateFormat df = DateFormat.getDateInstance(DateFormat.FULL);
+        System.out.println(df.format(cal.getTime()));
+         */
+        return cal.getTime();
+    }
+    
+    public void handleLine(String line) {
+        super.handleLine(line);
+        boolean first = true;
+        try {
+            FieldExtractionConfig[] fields = config.getFieldExtractionConfigs();
+            HashMap doneFields = new HashMap();
+            for (int i = 0; i < fields.length; i++) {
+                FieldExtractionConfig currentConfig = fields[i];
+                String fname = currentConfig.getFieldName();
+                String type = currentConfig.getFieldType().toLowerCase();
+                if (!doneFields.containsKey(fname)) {
+                    if (fieldResults.containsKey(fname)) {
+                        String s = (String)fieldResults.get(fname);
+                        if (type.equalsIgnoreCase("varchar")) {
+                            if (s.length() > maxVarcharSize)
+                                s = s.substring(0,maxVarcharSize);
+                            pstmt.setString(i+1,s);
+                        }
+                        else if (type.equalsIgnoreCase("timestamp")) {
+                            pstmt.setTimestamp(i+1,new Timestamp(getDate(s).getTime()));
+                        } else if (type.equalsIgnoreCase("number"))
+                            pstmt.setString(i+1,s);
+                        else
+                            throw new LogEvaluatorException("not supported type: " + type);
+                        doneFields.put(fname,"");
+                    } else
+                        if (type.equalsIgnoreCase("varchar"))
+                            pstmt.setNull(i+1,Types.CHAR);
+                        else if (type.equalsIgnoreCase("timestamp")) {
+                        pstmt.setNull(i+1,Types.TIMESTAMP);
+                        } else if (type.equalsIgnoreCase("number"))
+                            pstmt.setNull(i+1,Types.BIGINT);
+                        else
+                            throw new LogEvaluatorException("not supported type: " + type);
+                }
+            }
+            pstmt.addBatch();
+            reccount++;
+            if (reccount % maxbatchcount == 0)
+                pstmt.executeBatch();
+            if (reccount % maxtracount == 0) {
+                conn.commit();
+                if (reccount % (maxtracount * 80) == 0)
+                    outputter.println("*");
+                else
+                    outputter.print("*");
+                try {
+                    Thread.sleep(500);
+                } catch (Exception ex) {
+                    ;
+                }
+            }
+            
+        } catch (SQLException e) {
+            throw new LogEvaluatorException("Writing: to db", e);
+        }
+        
+    }
+    
+    
+    
+    public void ready() {
+        try {
+            pstmt.executeBatch();
+            conn.commit();
+        } catch (SQLException e) {
+            throw new LogEvaluatorException(e);
+        }
+    }
+    
+    
+    
+}
