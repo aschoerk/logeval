@@ -6,7 +6,7 @@ Small Swing Tool to design and do logfile evaluations
 What can be done with logeval 
 -----------------------------
 
-Using logeval a configuration-File can be created that can be used to repeated extract data from textual logfiles and put the extracted data into a sql-database or export it into a csv-file.
+Using logeval a configuration-File can be created that can be used to repeatedly extract data from textual logfiles and put the extracted data into a sql-database or export it into a csv-file.
 The program is ordered in multiple tabs
 * **Config** allows to manage the different config files
 * **LogFiles** allows to define the directory where the logfiles are which are to be evaluated
