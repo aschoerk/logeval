@@ -14,15 +14,53 @@ The program is ordered in multiple tabs:
 * **Extraction** in this Tab the extraction can be defined.
 * **Extraction to Db** this Tab allows to control the extraction into sql-database-tables
 * **Extraction to File** this Tab allows to define and control the extraction to a csv-file
+* 
+
+# Overall GUI
+As shown they different design and extraction steps can be defined in separate tabs. Sometimes information is 
+given about the results of the definition. This information is output in a protocol-area under the tab-area.
+This protocol-area also can be edited and most importantly cleared.
 
 ## How to define a specifig configuration
 All entries which are done are saved into a configuration-file. Using this tab you can 
+
+![the config-tab](https://github.com/aschoerk/logeval/raw/master/doc/images/logeval_config.png)
 
 * decide where this files can be found (**ConfigDir**) you can enter the directory directly or you can use the >-Button to navigate there using a dialog.
 * decide what the name of the current file is (**ConfigName**)
 * select one of your previously defined files that can be found in **ConfigDir** and load it.
 * save your changes of your current configuration.
 
-![the config-tabs](https://github.com/aschoerk/logeval/raw/master/doc/images/logeval_config.png)
+
+## How to define the files to be extracted
+
+![the files-tab](https://github.com/aschoerk/logeval/raw/master/doc/images/logeval_logfiles.png)
+
+* **Directory** the directory where to search for the Logfiles
+* **Node Recognizer** this can be used to define a special field named node to separate between different cluster-nodes
+* **Log Recognizer** a regular expression. If a file found under Directory fits to this, it will get extracted
+
+The files can be gzipped or text. If gzipped they naturally will be expanded before extraction.
+Using the Button **showFiles** will print out in the protocol-area the paths of all files that will be extracted.
+
 
 ## How to define the extraction done by a configuration
+![the files-tab](https://github.com/aschoerk/logeval/raw/master/doc/images/logeval_extraction.png)
+Using one configuration single lines of the logfiles can be extracted into single records of data. These 
+records are composed of fields having names, types and values. This tab allows to define these three information parts.
+Each line in the area defines an extraction rule. A extraction rule is composed of 
+
+* **Name** which will be the name of the field (attribute) in the csv-file or sql-table
+* **Pattern** which will allow to recognize the value of the field in the logfile-line. This is a regular expression containing groups. 
+These groups can be used in the subsequent field to define what part of the regular expression shall be used.  
+* **Rep..** defines hwo the value of the field is created. each group index is to be exclosed into **<** and **>** (not regex standard, I know)
+* **Type** allows to define how the type should be defined in the sql-database. It can be selected as one of 
+varchar, number, timestamp, date, time
+* **Length** will be used together with varchar to define the attribute length in the sql-table
+* **Line recognized by** defines a regular expression defining whether data of a specific line in the logfile will be extracted by this rule at all. 
+If no rule fits because not once the line is recognized by the corresponding regular expression, it will not produce an extraction result.
+
+At the bottom of the tab sample-lines can be used together with sample extraction regexes to build up the next rules.
+Input the sample-line as **Line:** the sample Regex as **Regex:** and set the result in the **Replace:** field. Pressing **Test Regex** 
+will produce the result in the protocol-area. If this result is ok, a new extraction Rule can be created by pressing the button **newExtractionRule**.
+The **Times** - Button can be used to find out how costly the defined rules are. The results will be printed beside the Length-Field of the extraction rules.
