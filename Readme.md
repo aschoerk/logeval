@@ -20,6 +20,7 @@ The program is ordered in multiple tabs:
 As shown they different design and extraction steps can be defined in separate tabs. Sometimes information is 
 given about the results of the definition. This information is output in a protocol-area under the tab-area.
 This protocol-area also can be edited and most importantly cleared.
+There all also some tool-tips defined which should help to explain the various functions of the GUI-elements.
 
 ## How to define a specifig configuration
 All entries which are done are saved into a configuration-file. Using this tab you can 
