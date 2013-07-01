@@ -65,3 +65,27 @@ At the bottom of the tab sample-lines can be used together with sample extractio
 Input the sample-line as **Line:** the sample Regex as **Regex:** and set the result in the **Replace:** field. Pressing **Test Regex** 
 will produce the result in the protocol-area. If this result is ok, a new extraction Rule can be created by pressing the button **newExtractionRule**.
 The **Times** - Button can be used to find out how costly the defined rules are. The results will be printed beside the Length-Field of the extraction rules.
+
+## Extraction to a sql-database
+![the files-tab](https://github.com/aschoerk/logeval/raw/master/doc/images/logeval_extraction_to_db.png)
+
+Using *logval* it is possible to extract data directly and fast into a sql-database. Provided a suitable jdbc-driver is put into the lib-directory of logval, 
+here the creation of a jdbc-connection can be defined. **DbUrl**, **Jdbc-Class**, **Db User** and **Db Password** 
+must be entered accordingly. The connection can be tested using the button **Test Connection**.
+
+The further information is used to defined how the data is input into the database. 
+* **Allow Create** means, if the table is not found it may be created. 
+* **Truncate if Exists** means that all data may be removed before inserting new data
+* **Force Create** leads to an unconditionally executed *Create Table...* - statement.
+
+If only **Allow Create** is checked, it is expected, that the table exists and data will be added to it.
+
+* **Tablename** allows it to enter the name of the table to be created or added to.
+* **Transaction Size** allows it to define the maximum number of records to be inserted in one transaction
+* **Batch Size** allows it to define how many records are sent to the database-server in on Batch.
+* **Max Varchar Size** allows it to define how the varchars in the *Create Table ...* - statements are defined maximum.
+
+Pressing **Extract to Db** leads to the extraction of the data from the files previously defined in tab *LogFiles* 
+using the rules defined in *Extraction* to the table entered here in *Tablename* which might be emptied or 
+newly created or added to.
+
