@@ -89,3 +89,10 @@ Pressing **Extract to Db** leads to the extraction of the data from the files pr
 using the rules defined in *Extraction* to the table entered here in *Tablename* which might be emptied or 
 newly created or added to.
 
+## Extraction to a csv-file
+![the sql-tab](https://github.com/aschoerk/logeval/raw/master/doc/images/logeval_extraction_to_file.png)
+
+This tab can be used to create a csv-file which later can be used in several tools to do further evaluations of the logfile data. At **separator** the field-separator can be defined. All varchar-fields will be enclosed into **"**. In **FileName** the name of the to be created file can be entered. Using komma-separated field-names the fields to output, and their order in the file can be defined. By pressing **extract** the extraction into the file is started.
+
+## Development
+The tool has been developed using netbeans. Changes should be done using this.
