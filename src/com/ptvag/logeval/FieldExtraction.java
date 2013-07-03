@@ -36,9 +36,9 @@ public class FieldExtraction extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         fieldRecognizerTextField = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
+        fieldTypeComboBox = new javax.swing.JComboBox();
         fieldNameTextField = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        fieldTypeComboBox = new javax.swing.JComboBox();
         jLabel4 = new javax.swing.JLabel();
         fieldLengthTextField = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -70,6 +70,14 @@ public class FieldExtraction extends javax.swing.JPanel {
 
         jLabel6.setText("Name:");
 
+        fieldTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Varchar", "Timestamp", "Number", "Date", "Time" }));
+        fieldTypeComboBox.setToolTipText("type of field in database, varchar may be truncated, date and time not implemented yet");
+        fieldTypeComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                changed(evt);
+            }
+        });
+
         fieldNameTextField.setToolTipText("name of field, will be used in sql-table creation of extraction file header");
         fieldNameTextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -81,14 +89,6 @@ public class FieldExtraction extends javax.swing.JPanel {
         });
 
         jLabel3.setText("Type:");
-
-        fieldTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Varchar", "Timestamp", "Number", "Date", "Time" }));
-        fieldTypeComboBox.setToolTipText("type of field in database, varchar may be truncated, date and time not implemented yet");
-        fieldTypeComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                changed(evt);
-            }
-        });
 
         jLabel4.setText("Length:");
 
@@ -139,22 +139,21 @@ public class FieldExtraction extends javax.swing.JPanel {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createSequentialGroup()
-                        .add(fieldRecognizerTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jLabel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 42, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(layout.createSequentialGroup()
                         .add(fieldLengthTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 32, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(12, 12, 12)
-                        .add(countIn500Label, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE)
+                        .add(countIn500Label, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jLabel1)))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                    .add(layout.createSequentialGroup()
-                        .add(lineRecognizerTextField)
+                        .add(jLabel1)
+                        .add(4, 4, 4)
+                        .add(lineRecognizerTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 112, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(deleteButton))
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, replacePatternTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 134, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                    .add(layout.createSequentialGroup()
+                        .add(fieldRecognizerTextField)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jLabel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 74, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(replacePatternTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 102, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
