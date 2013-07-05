@@ -38,7 +38,7 @@ public class MainFrame extends javax.swing.JFrame implements Constants, IOutputt
         loadKonfigButtonActionPerformed(null);
     }
     
-    final static String VERSION = "v1.04";
+    final static String VERSION = "v1.05";
     
     /** This method is called from within the constructor to
      * initialize the form.
@@ -193,12 +193,13 @@ public class MainFrame extends javax.swing.JFrame implements Constants, IOutputt
                         .add(10, 10, 10)
                         .add(configPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                             .add(configPanelLayout.createSequentialGroup()
+                                .add(konfigDirTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 436, Short.MAX_VALUE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(configDirNavButton))
+                            .add(configPanelLayout.createSequentialGroup()
                                 .add(konfigNameTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 265, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                                 .add(32, 32, 32)
-                                .add(configChooseComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 139, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                            .add(konfigDirTextField))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(configDirNavButton)))
+                                .add(configChooseComboBox, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                 .add(52, 52, 52))
         );
         configPanelLayout.setVerticalGroup(
@@ -836,7 +837,7 @@ public class MainFrame extends javax.swing.JFrame implements Constants, IOutputt
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .add(jSplitPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 805, Short.MAX_VALUE)
+                .add(jSplitPane1)
                 .addContainerGap())
         );
         layout.setVerticalGroup(

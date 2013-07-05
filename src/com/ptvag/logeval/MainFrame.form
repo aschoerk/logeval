@@ -115,14 +115,16 @@
                                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                           <Group type="102" attributes="0">
+                                              <Component id="konfigDirTextField" pref="436" max="32767" attributes="1"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="configDirNavButton" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <Group type="102" attributes="0">
                                               <Component id="konfigNameTextField" min="-2" pref="265" max="-2" attributes="0"/>
                                               <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                                              <Component id="configChooseComboBox" min="-2" pref="139" max="-2" attributes="0"/>
+                                              <Component id="configChooseComboBox" max="32767" attributes="0"/>
                                           </Group>
-                                          <Component id="konfigDirTextField" max="32767" attributes="1"/>
                                       </Group>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="configDirNavButton" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
