@@ -7,7 +7,7 @@
  * and open the template in the editor.
  */
 
-package com.ptvag.logeval;
+package de.aschoerk.logeval;
 
 /**
  *

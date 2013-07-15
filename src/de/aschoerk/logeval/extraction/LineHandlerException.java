@@ -1,4 +1,4 @@
-package com.ptvag.logeval.extraction;
+package de.aschoerk.logeval.extraction;
 
 
 public class LineHandlerException extends RuntimeException {

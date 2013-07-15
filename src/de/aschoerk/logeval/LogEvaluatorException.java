@@ -1,4 +1,4 @@
-package com.ptvag.logeval;
+package de.aschoerk.logeval;
 
 
 public class LogEvaluatorException extends RuntimeException {

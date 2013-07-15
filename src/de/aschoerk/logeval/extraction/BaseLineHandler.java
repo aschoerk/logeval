@@ -1,7 +1,9 @@
-package com.ptvag.logeval.extraction;
+package de.aschoerk.logeval.extraction;
 
-import com.ptvag.logeval.*;
-import com.ptvag.logeval.ReplacementContext;
+import de.aschoerk.logeval.FieldExtractionConfig;
+import de.aschoerk.logeval.IFieldReplacer;
+import de.aschoerk.logeval.LogEvalConfig;
+import de.aschoerk.logeval.ReplacementContext;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

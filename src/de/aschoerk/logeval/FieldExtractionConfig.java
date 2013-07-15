@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.ptvag.logeval;
+package de.aschoerk.logeval;
 
 import java.util.Properties;
 import java.util.regex.Pattern;

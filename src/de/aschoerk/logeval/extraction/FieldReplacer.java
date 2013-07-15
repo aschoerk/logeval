@@ -7,10 +7,10 @@
  * and open the template in the editor.
  */
 
-package com.ptvag.logeval.extraction;
+package de.aschoerk.logeval.extraction;
 
-import com.ptvag.logeval.IFieldReplacer;
-import com.ptvag.logeval.ReplacementContext;
+import de.aschoerk.logeval.IFieldReplacer;
+import de.aschoerk.logeval.ReplacementContext;
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -6,10 +6,10 @@
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
  */
-package com.ptvag.logeval;
+package de.aschoerk.logeval;
 
-import com.ptvag.logeval.extraction.BaseLineHandler;
-import com.ptvag.logeval.extraction.LineHandler;
+import de.aschoerk.logeval.extraction.BaseLineHandler;
+import de.aschoerk.logeval.extraction.LineHandler;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;

@@ -7,9 +7,9 @@
  * and open the template in the editor.
  */
 
-package com.ptvag.logeval;
+package de.aschoerk.logeval;
 
-import com.ptvag.logeval.extraction.LineHandlerException;
+import de.aschoerk.logeval.extraction.LineHandlerException;
 import java.sql.Connection;
 
 /**

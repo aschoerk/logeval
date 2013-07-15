@@ -4,9 +4,9 @@
  * Created on 23. Februar 2007, 08:58
  */
 
-package com.ptvag.logeval;
+package de.aschoerk.logeval;
 
-import com.ptvag.logeval.extraction.FieldReplacer;
+import de.aschoerk.logeval.extraction.FieldReplacer;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.KeyEvent;
@@ -38,7 +38,7 @@ public class MainFrame extends javax.swing.JFrame implements Constants, IOutputt
         loadKonfigButtonActionPerformed(null);
     }
     
-    final static String VERSION = "v1.05";
+    final static String VERSION = "v1.06";
     
     /** This method is called from within the constructor to
      * initialize the form.

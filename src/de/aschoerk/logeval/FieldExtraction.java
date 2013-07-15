@@ -4,7 +4,7 @@
  * Created on 23. Februar 2007, 12:47
  */
 
-package com.ptvag.logeval;
+package de.aschoerk.logeval;
 
 import java.awt.event.KeyEvent;
 import javax.swing.border.TitledBorder;
